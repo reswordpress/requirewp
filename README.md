@@ -10,5 +10,7 @@ It is common for larger projects to concatenate together scripts however, they c
 By default, RequireWP assumes all scripts (except the default WordPress scripts that are known to be AMD-compatible) are shims (not AMD-compatible) and will attempt to load them and their dependencies as such. You can define your module to not be configured as a shim via a plugin filter (you can instead define as a bundle, plugin, or simply needs requiring). See plugin website for more details.
 
 *NOTE:* Some themes do not have their script dependencies set correctly. You may need to modify your theme and correct any missing dependencies or risk having your site load improperly or not at all (depending on what the scripts do) at various times. That is the nature of asynchronous loading.
+
 *NOTE:* Not all plugins or themes may work with this plugin, depending on how scripts are being used, but most should. There are various "tricks" you can do to get them to work properly (filters are provided for most), however everyone should be encouraging the use of asynchronous script development.
+
 *NOTE:* This plugin currently only replaces non-administrative (front-end) scripts with Require.js syntax.
