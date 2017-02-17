@@ -47,5 +47,8 @@ See Require.js’s website: http://requirejs.org/
 
 == Changelog ==
 
+= 1.0.1 =
+Minor readme changes.
+
 = 1.0 =
 * Initial release
