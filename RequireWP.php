@@ -3,7 +3,7 @@
 Plugin Name: RequireWP
 Plugin URI:  https://developer.wordpress.org/plugins/requirewp/
 Description: Uses Require.js to load scripts asynchronously to increase site load speed. Designed to work with HTTP/2.
-Version:     1.0.4
+Version:     1.0.5
 Author:      Jim Robinson
 Author URI:  https://techie-jim.net/
 License:     GPL2+
@@ -11,9 +11,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Text Domain: requirewp
 */
 
-if( !class_exists( 'RequireWP') ) {
-    return;
-}
+if( !class_exists( 'RequireWP' ) ) {
+
 
 /**
  * Class used to manage Require.js scripts.
@@ -723,6 +722,8 @@ class RequireWP extends WP_Scripts {
         }
         return $type;
     }
+
+}
 
 }
 
