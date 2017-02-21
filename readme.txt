@@ -53,6 +53,12 @@ as a bundle, plugin, or simply needs requiring). See plugin website for more det
 
 == Changelog ==
 
+= 1.0.2 =
+- Corrected issue where schema/protocol-agnostic URIs were not handled properly
+- Updated plugin readme files for keyword suggestions
+- Moved some description notes into FAQ
+- Incremented version to 1.0.2
+
 = 1.0.1 =
 Minor readme changes.
 
