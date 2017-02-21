@@ -454,7 +454,6 @@ class RequireWP extends WP_Scripts {
             null, '0.5.0'
         );
         $this->rwp_add_property( 'cs', 'pathOnly', true );
-        wp_enqueue_script( 'test', '//example.com/js/one.js' );
 
         // i18n (internationalization) plugin
         wp_register_script( 'i18n', plugins_url( 'js/i18n.js', __FILE__ ),
