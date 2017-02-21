@@ -3,7 +3,7 @@ Contributors: jimbo2150
 Tags: scripts, javascript
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -52,6 +52,9 @@ attempt to load them and their dependencies as such. You can define your module 
 as a bundle, plugin, or simply needs requiring). See plugin website for more details.
 
 == Changelog ==
+
+= 1.0.3 =
+- Removed an example script that was used to test.
 
 = 1.0.2 =
 - Corrected issue where schema/protocol-agnostic URIs were not handled properly
