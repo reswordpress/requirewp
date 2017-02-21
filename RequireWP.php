@@ -85,7 +85,19 @@ class RequireWP extends WP_Scripts {
             'media-views' => 'CollectionAdd', 'media-editor' => 'wp.media.editor',
             'media-audiovideo' => 'wp.media.mixin', 'mce-view' => 'wp.mce',
             'wp-api' => 'wp.api'
-        ];
+        ],
+        /**
+         * Regular expression to match the schema (protocol) of a URL/URI.
+         *
+         * @var string
+         */
+        REGEXP_SCHEMA = '/^([[:alpha:]][[:alnum:]\+\-\.]*\:)(?=\/\/)/',
+        /**
+         * Regular expression to match ".js" at the end of a URL/URI.
+         *
+         * @var string
+         */
+        REGEXP_JS = '/\.js\/?$/';
 
     public static
         /**
@@ -434,26 +446,27 @@ class RequireWP extends WP_Scripts {
         wp_enqueue_script( 'domReady',
             plugins_url( 'js/domReady.js', __FILE__), null, '2.0.1'
         );
-        $this->rwp_add_property('domReady', 'domFirst', false);
-        $this->rwp_add_property('domReady', 'pathOnly', true);
+        $this->rwp_add_property( 'domReady', 'domFirst', false );
+        $this->rwp_add_property( 'domReady', 'pathOnly', true );
 
         // CoffeeScript plugin
         wp_register_script( 'cs', plugins_url( 'js/cs.js', __FILE__ ),
             null, '0.5.0'
         );
-        $this->rwp_add_property('cs', 'pathOnly', true);
+        $this->rwp_add_property( 'cs', 'pathOnly', true );
+        wp_enqueue_script( 'test', '//example.com/js/one.js' );
 
         // i18n (internationalization) plugin
         wp_register_script( 'i18n', plugins_url( 'js/i18n.js', __FILE__ ),
             null, '2.0.6'
         );
-        $this->rwp_add_property('i18n', 'pathOnly', true);
+        $this->rwp_add_property( 'i18n', 'pathOnly', true );
 
         // text plugin
         wp_register_script( 'text', plugins_url( 'js/text.js', __FILE__ ),
             null, '2.0.15'
         );
-        $this->rwp_add_property('text', 'pathOnly', true);
+        $this->rwp_add_property( 'text', 'pathOnly', true );
 
     }
 
@@ -555,16 +568,41 @@ class RequireWP extends WP_Scripts {
      * @return string
      */
     public static function _rwp_relativeUrl($url, $handle = false) {
-        static $homeLen = null;
-        if( $homeLen == null ) {
-            $homeLen = strlen(trailingslashit(home_url('/')));
+        if( substr( $url, 0, 2 ) == '//' ) {
+            $altUrl = preg_replace( static::REGEXP_JS, '', $url );
+        } else {
+            $altUrl = preg_replace( static::REGEXP_JS, '', ltrim( $url, '/' ) );
         }
-        if( strpos($url, home_url('/')) !== 0 ) {
-            return preg_replace( '/\.js\/?$/', '', ltrim($url, '/') );
+        if( false === ($len = static::_rwp_url_lenRelative($altUrl)) ) {
+            return $altUrl;
         }
-        return ltrim(preg_replace( '/\.js\/?$/', '',
-            substr(trailingslashit($url),$homeLen)
-        ), '/');
+        return substr( $altUrl, $len );
+    }
+
+    /**
+     * Checks if the input URL matches the home URL/URI with or without the
+     * schema (protocol). If it matches the beginning of the string, the length
+     * of the root path is returned.
+     *.
+     * @param string    $url Full URL to the script.
+     * @return mixed
+     */
+    public static function _rwp_url_lenRelative($url) {
+        static $homeUrls = [];
+        if( !isset($homeUrls['url']) ) {
+            $homeUrls['url']['rel'] = preg_replace( static::REGEXP_SCHEMA, '',
+                ($homeUrls['url']['base'] = trailingslashit( home_url('/') ))
+            );
+            $homeUrls['len'] = array_map( 'strlen', $homeUrls['url'] );
+        }
+        if( substr($url, 2) == '//' &&
+            strpos( $url, $homeUrls['url']['rel'] ) === 0
+        ) {
+            return $homeUrls['len']['rel'];
+        } elseif( strpos( $url, $homeUrls['url']['base'] ) === 0 ) {
+            return $homeUrls['len']['base'];
+        }
+        return false;
     }
 
     /**
