@@ -20,7 +20,7 @@ It is common for larger projects to concatenate together scripts however, they c
 
 *NOTE:* This plugin currently only replaces non-administrative (front-end) scripts with Require.js syntax.
 
-Plugin website: https://techie-jim.net/
+Plugin website: https://techie-jim.net/wordpress-plugins/requirewp/
 
 == Installation ==
 
