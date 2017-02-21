@@ -3,7 +3,7 @@
 Plugin Name: RequireWP
 Plugin URI:  https://developer.wordpress.org/plugins/requirewp/
 Description: Uses Require.js to load scripts asynchronously to increase site load speed. Designed to work with HTTP/2.
-Version:     1.0.3
+Version:     1.0.4
 Author:      Jim Robinson
 Author URI:  https://techie-jim.net/
 License:     GPL2+
@@ -127,7 +127,14 @@ class RequireWP extends WP_Scripts {
          *
          * @var bool
          */
-        $rwpDomFirst = true;
+        $rwpDomFirst = true,
+        /**
+         * If true, will set jquery and jquery-migrate to load synchronously
+         * to fix some plugins that call jQuery within the body of the page.
+         *
+         * @var bool
+         */
+        $rwpJquerySynchronous = true;
 
     /**
      * Adds base require.js configuration & required WordPress filters &
@@ -377,9 +384,12 @@ class RequireWP extends WP_Scripts {
      * @return string
      */
     public function _rwp_modify_script($tag, $handle, $src) {
-        if( $this->rwp_is_path_only($handle) ) {
+        if( $this->rwp_load_synchronous($handle) ) {
+            return $tag;
+        } elseif( $this->rwp_is_path_only($handle) ) {
             return '';
         }
+
         $wp_scripts = wp_scripts();
         $search = "<script type='text/javascript' src='$src'></script>";
         $require = $this->rwp_generate_require($handle);
@@ -438,6 +448,18 @@ class RequireWP extends WP_Scripts {
     }
 
     /**
+     * Returns true if the loadSynchronous RWP property is set for the script.
+     * When true, the script with the given handle should be loaded
+     * synchronously.
+     *
+     * @param mixed $handle null or a string handle of a script
+     * @return bool
+     */
+    public function rwp_load_synchronous($handle) {
+        return $this->rwp_get_property($handle, 'loadSynchronous') == true;
+    }
+
+    /**
      * Adds the base Require.js scripts for use when needed.
      */
     public function _rwp_add_scripts() {
@@ -466,6 +488,14 @@ class RequireWP extends WP_Scripts {
             null, '2.0.15'
         );
         $this->rwp_add_property( 'text', 'pathOnly', true );
+
+        // jQuery synchronous loader
+        if( static::$rwpJquerySynchronous && isset($this->registered['jquery'])
+        ) {
+            foreach( $this->registered['jquery']->deps as $jqD ) {
+                $this->rwp_add_property( $jqD, 'loadSynchronous', true );
+            }
+        }
 
     }
 
