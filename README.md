@@ -1,4 +1,5 @@
-This WordPress plugin extends the WP_Scripts class, adding some additional methods and filters that overload the existing script output to add Require.js syntax. It loads scripts via Require.js and by default defers until the DOMContentLoaded event fires (unless a manually added require() is called within the head/body and does not wait for the DOM to be loaded.
+This WordPress plugin is designed to speed up WordPress by allowing the browser time to render the page properly before loading and executing scripts. It extends the WP_Scripts class, adding some additional methods and filters that overload the existing script output to add Require.js syntax. It loads scripts via Require.js and by default defers until the DOMContentLoaded event fires (unless a manually added require() is called within the head/body and does not wait for the DOM to be loaded.
+
 It is designed to work in conjunction with HTTP/2 but will function fine without it (though you may see slower load times).
 
 **~20% decrease in page load time on a shared server with HTTP/2 and encryption!**
@@ -14,3 +15,5 @@ By default, RequireWP assumes all scripts (except the default WordPress scripts 
 *NOTE:* Not all plugins or themes may work with this plugin, depending on how scripts are being used, but most should. There are various "tricks" you can do to get them to work properly (filters are provided for most), however everyone should be encouraging the use of asynchronous script development.
 
 *NOTE:* This plugin currently only replaces non-administrative (front-end) scripts with Require.js syntax.
+
+[Plugin Website](https://techie-jim.net/wordpress-plugins/requirewp/)
